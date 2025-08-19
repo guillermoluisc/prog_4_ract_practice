@@ -1,0 +1,15 @@
+/* Ocupa toda la pantalla y centra todo */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  display: flex;
+  justify-content: center; /* centra horizontal */
+  align-items: center;     /* centra vertical */
+  background-color: #527fc2;
+  font-family: Arial, sans-serif;
+}
+
