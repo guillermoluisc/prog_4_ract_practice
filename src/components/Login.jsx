@@ -10,13 +10,15 @@ function Login() {
   e.preventDefault();
 
   try {
-    const formData = new FormData();
-    formData.append("email", email);
-    formData.append("password", password);
-
     const response = await fetch("http://localhost:91/login", {
       method: "POST",
-      body: formData, 
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
     });
 
     if (!response.ok) {
@@ -25,13 +27,20 @@ function Login() {
     }
 
     const data = await response.json();
-    localStorage.setItem("token", data.token); 
-    navigate("/home"); 
+    localStorage.setItem("token", data.token);
+    
+    // Si el backend también manda role, lo podés guardar aquí 
+    // if (data.role) {
+    //   localStorage.setItem("role", data.role);
+    // }
+
+    navigate("/home");
   } catch (error) {
     console.error("Error en login:", error);
     alert("No se pudo conectar al servidor");
   }
 };
+
 
 
   return (
