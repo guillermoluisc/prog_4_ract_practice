@@ -17,6 +17,7 @@ function Login() {
   // Operaciones asíncronas son aquellas que no se resuelven inmediatamente, como llamadas a un servidor o lectura de archivos.
 
   try {
+    //El fetch al link que corresponda
     const response = await fetch("http://localhost:91/login", {
         method: "POST",
         headers: {
