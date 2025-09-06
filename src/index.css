@@ -1,15 +1,10 @@
-/* Ocupa toda la pantalla y centra todo */
-html, body, #root {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
 #root {
-  display: flex;
+  padding-left: 5%;
   justify-content: center; /* centra horizontal */
-  align-items: center;     /* centra vertical */
-  background-color: #2760b5;
   font-family: Arial, sans-serif;
 }
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
