@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchDomains } from "../services/domainService";
+import { fetchSearchDomains } from "../services/domainService";
 import DomainList from "./DomainList";
 import Spinner from "./Snipper";
 
@@ -20,7 +20,7 @@ export default function HomeContainer() {
     setIsLoading(true);
 
     try {
-      const data = await fetchDomains(token);
+      const data = await fetchSearchDomains(token);
       setDomains(data);
     } catch (error) {
       alert(error.message);
