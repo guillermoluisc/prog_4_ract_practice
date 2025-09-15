@@ -6,10 +6,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // Importa el componente Login, que será la página de inicio de sesión.
 import Login from "./components/Login"; 
 // Importa el componente Home, que será la página principal protegida.
-import Home from "./components/Home"; 
+import HomeContainer from "./components/HomeContainer"; 
 // Importa el componente ProtectedRoute, que protege rutas solo para usuarios autenticados.
 import ProtectedRoute from "./components/ProtectedRoute"; 
-import "./index.css"; 
+import "./styles/index.css"; 
 
 // Selecciona el elemento del DOM con id "root" y crea la raíz de la aplicación React para renderizar los componentes dentro.
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -25,7 +25,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           path="/home" 
           element={
             <ProtectedRoute>
-              <Home />
+              <HomeContainer />
             </ProtectedRoute>
           } 
           />

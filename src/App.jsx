@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'  // Importamos hooks de React para manejar estado y efectos
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
-import './App.css'
+import './styles/App.css'
 import Saludo from './components/Saludo'
 import Descripcion from './components/Descripcion'
 import Formulario from './components/Formulario'
