@@ -1,8 +1,8 @@
-//Aqui solo se exportan funciones que serán utilizadas por los componentes
-//Cuando hacemos Export se pueden utilizar en los componentes
-//Estos sirven para conecciones con las apis
+// services/domainService.js
+import { API_BASE_URL, API_ENDPOINTS } from "../utils/constants";
+
 export async function fetchDomains(token) {
-  const response = await fetch("http://localhost:91/domains", {
+  const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.DOMAINS}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

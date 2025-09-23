@@ -1,35 +1,35 @@
-import React from "react"; 
-// Importa ReactDOM para renderizar los componentes de React en el DOM del navegador.
-import ReactDOM from "react-dom/client"; 
-// Importa componentes de React Router para manejar rutas en la aplicación web.
-import { BrowserRouter, Routes, Route } from "react-router-dom"; 
-// Importa el componente Login, que será la página de inicio de sesión.
-import Login from "./components/Login"; 
-// Importa el componente Home, que será la página principal protegida.
-import HomeContainer from "./components/HomeContainer"; 
-// Importa el componente ProtectedRoute, que protege rutas solo para usuarios autenticados.
-import ProtectedRoute from "./components/ProtectedRoute"; 
-import "./styles/index.css"; 
+// main.js
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-// Selecciona el elemento del DOM con id "root" y crea la raíz de la aplicación React para renderizar los componentes dentro.
+// Primer Cambio Para Adaptar a la estructura 
+// Importar páginas en lugar de componentes
+import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
+
+//Aqui si incorporamos Componentes
+import ProtectedRoute from "./components/ProtectedRoute";
+
+//Estilos
+import "./styles/index.css";
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    {/* // Activa el modo estricto de React para ayudar a detectar problemas potenciales en la aplicación. */}
     <BrowserRouter>
-    {/* // Envuelve la aplicación con BrowserRouter para habilitar el enrutamiento basado en URLs. */}
       <Routes>
-      {/* // Define un contenedor para declarar todas las rutaS de la aplicación. */}
-        <Route path="/" element={<Login />} />
-        {/* // Define la ruta principal "/" y renderiza el componente Login cuando el usuario accede a esta URL. */}
+        {/* En el lugar "ir" a un componente, vamos ahora si a una págnia */}
+        <Route path="/" element={<LoginPage />} />
         <Route 
           path="/home" 
           element={
             <ProtectedRoute>
-              <HomeContainer />
+              {/* En el lugar "ir" a un componente, vamos ahora si a una págnia */}
+              {/* Antes teniamos Home Container */}
+              <HomePage />
             </ProtectedRoute>
           } 
-          />
-          {/* // Define la ruta "/home" y renderiza el componente Home solo si ProtectedRoute permite el acceso (es decir, si el usuario está autenticado). */}
+        />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
