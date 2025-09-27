@@ -1,12 +1,22 @@
 // components/ProtectedRoute.jsx
 import { Navigate } from "react-router-dom";
-//utils
-import { getToken } from "../utils/storage"; // Usar la utilidad
+import { useSelector } from 'react-redux';
+import { getToken } from "../utils/storage";
 
 function ProtectedRoute({ children }) {
-  const token = getToken(); // Usar la función de utilidad
+  // Leer desde Redux
+  const { isAuthenticated, token: reduxToken } = useSelector((state) => state.auth);
+  
+  // ✨ NUEVO: También verificar localStorage como fallback
+  const localToken = getToken();
+  
+  // Usuario está autenticado si:
+  // 1. Redux dice que sí Y hay token en Redux
+  // 2. O hay token en localStorage (para cuando se recarga la página)
+  const hasValidToken = (isAuthenticated && reduxToken) || localToken;
 
-  if (!token) {
+    // const hasValidToken = isAuthenticated && reduxToken;
+  if (!hasValidToken) {
     return <Navigate to="/" replace />;
   }
 

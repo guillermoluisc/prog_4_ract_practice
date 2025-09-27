@@ -1,46 +1,59 @@
 // hooks/useDomains.js
-import { useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
+
+// Redux actions
+import { 
+  fetchDomainsStart, 
+  fetchDomainsSuccess, 
+  fetchDomainsFailure, 
+  clearDomains 
+} from '../store/slices/domainSlice';
+import { logout as logoutAction } from '../store/slices/authSlice';
+
+// Services
 import { fetchDomains } from "../services/domainService";
-import { getToken, removeToken } from "../utils/storage";
+
+// Utils
+import { removeToken } from "../utils/storage";
 
 export function useDomains() {
-  const [domains, setDomains] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  
+  // ✨ CAMBIO: Leer desde Redux
+  const { domains, isLoading, error } = useSelector((state) => state.domains);
+  const { token } = useSelector((state) => state.auth);
 
   const searchDomains = async () => {
-    const token = getToken();
-    
     if (!token) {
       navigate("/");
       return;
     }
 
-    setIsLoading(true);
-    setError(null);
+    // ✨ CAMBIO: Dispatch a Redux
+    dispatch(fetchDomainsStart());
 
     try {
       const data = await fetchDomains(token);
-      setDomains(data);
-    } catch (err) {
-      setError(err.message);
-      setDomains([]);
       
-      // Si el token es inválido, redirigir al login
+      // ✨ CAMBIO: Success a Redux
+      dispatch(fetchDomainsSuccess(data));
+    } catch (err) {
+      // ✨ CAMBIO: Error a Redux
+      dispatch(fetchDomainsFailure(err.message));
+      
+      // Si el token es inválido, hacer logout completo
       if (err.message.includes("inválido") || err.message.includes("expirada")) {
         removeToken();
+        dispatch(logoutAction());
         navigate("/");
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  const clearDomains = () => {
-    setDomains([]);
-    setError(null);
+  const clearDomainsData = () => {
+    dispatch(clearDomains());
   };
 
   return {
@@ -48,6 +61,6 @@ export function useDomains() {
     isLoading,
     error,
     searchDomains,
-    clearDomains
+    clearDomains: clearDomainsData
   };
 }

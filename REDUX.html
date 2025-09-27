@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flujo Usuario - Login a Logout</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .flow-container {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: 1fr;
+        }
+        
+        .phase {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-left: 6px solid;
+        }
+        
+        .phase.inicio { border-left-color: #2196F3; }
+        .phase.login { border-left-color: #FF9800; }
+        .phase.proteccion { border-left-color: #4CAF50; }
+        .phase.busqueda { border-left-color: #9C27B0; }
+        .phase.logout { border-left-color: #F44336; }
+        
+        .phase-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .phase-icon {
+            font-size: 2rem;
+        }
+        
+        .steps {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 3px solid #ddd;
+            transition: all 0.3s ease;
+        }
+        
+        .step:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .step-number {
+            background: #333;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .step-description {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .code {
+            background: #282c34;
+            color: #61dafb;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+        }
+        
+        .arrow {
+            text-align: center;
+            font-size: 2rem;
+            color: white;
+            margin: 10px 0;
+        }
+        
+        .decision {
+            background: #fff3cd;
+            border: 2px dashed #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+            color: #856404;
+        }
+        
+        .success {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+        
+        .error {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Flujo Completo del Usuario</h1>
+        
+        <!-- FASE 1: INICIO -->
+        <div class="phase inicio">
+            <div class="phase-title">
+                <span class="phase-icon">🌟</span>
+                FASE 1: INICIO DE LA APLICACIÓN
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-title">Usuario accede a la aplicación</div>
+                        <div class="step-description">
+                            <span class="code">main.js</span> se ejecuta y envuelve la app con <span class="code">Provider</span> de Redux
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-title">Verificación de token existente</div>
+                        <div class="step-description">
+                            <span class="code">useAuth</span> verifica si hay token en localStorage con <span class="code">getToken()</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="decision">
+                    ¿Hay token guardado en localStorage?
+                </div>
+                <div class="step success">
+                    <div class="step-number">✓</div>
+                    <div class="step-content">
+                        <div class="step-title">SÍ hay token</div>
+                        <div class="step-description">
+                            <span class="code">dispatch(restoreToken)</span> → Redux guarda el token → Redirige a <span class="code">/home</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="step error">
+                    <div class="step-number">✗</div>
+                    <div class="step-content">
+                        <div class="step-title">NO hay token</div>
+                        <div class="step-description">
+                            Muestra <span class="code">LoginPage</span> en la ruta <span class="code">/</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="arrow">⬇️</div>
+        
+        <!-- FASE 2: LOGIN -->
+        <div class="phase login">
+            <div class="phase-title">
+                <span class="phase-icon">🔐</span>
+                FASE 2: PROCESO DE LOGIN
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-title">Usuario ingresa credenciales</div>
+                        <div class="step-description">
+                            En <span class="code">LoginPage</span> el usuario escribe email y password
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-title">Inicio del proceso de login</div>
+                        <div class="step-description">
+                            <span class="code">useAuth.login()</span> ejecuta → <span class="code">dispatch(loginStart)  (función de Redux que sirve para enviar acciones al store) </span> → <span class="code">isLoading = true</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-title">Llamada al backend</div>
+                        <div class="step-description">
+                            <span class="code">loginUser(email, password)</span> hace petición HTTP al servidor
+                        </div>
+                    </div>
+                </div>
+                <div class="decision">
+                    ¿Login exitoso?
+                </div>
+                <div class="step success">
+                    <div class="step-number">✓</div>
+                    <div class="step-content">
+                        <div class="step-title">Login exitoso</div>
+                        <div class="step-description">
+                            1. <span class="code">saveToken(data.token)</span> guarda en localStorage<br>
+                            2. <span class="code">dispatch(loginSuccess)</span> guarda en Redux<br>
+                            3. <span class="code">navigate('/home')</span> redirige al home
+                        </div>
+                    </div>
+                </div>
+                <div class="step error">
+                    <div class="step-number">✗</div>
+                    <div class="step-content">
+                        <div class="step-title">Login fallido</div>
+                        <div class="step-description">
+                            <span class="code">dispatch(loginFailure)</span> → Muestra error en LoginPage
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="arrow">⬇️</div>
+        
+        <!-- FASE 3: PROTECCIÓN -->
+        <div class="phase proteccion">
+            <div class="phase-title">
+                <span class="phase-icon">🛡️</span>
+                FASE 3: PROTECCIÓN DE RUTAS
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-title">Validación de acceso</div>
+                        <div class="step-description">
+                            <span class="code">ProtectedRoute</span> verifica token en Redux y localStorage
+                        </div>
+                    </div>
+                </div>
+                <div class="decision">
+                    ¿Token válido?
+                </div>
+                <div class="step success">
+                    <div class="step-number">✓</div>
+                    <div class="step-content">
+                        <div class="step-title">Token válido</div>
+                        <div class="step-description">
+                            Renderiza <span class="code">HomePage</span> y permite acceso
+                        </div>
+                    </div>
+                </div>
+                <div class="step error">
+                    <div class="step-number">✗</div>
+                    <div class="step-content">
+                        <div class="step-title">Token inválido</div>
+                        <div class="step-description">
+                            <span class="code">Navigate to="/"</span> redirige al login
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="arrow">⬇️</div>
+        
+        <!-- FASE 4: BÚSQUEDA -->
+        <div class="phase busqueda">
+            <div class="phase-title">
+                <span class="phase-icon">🔍</span>
+                FASE 4: BÚSQUEDA DE DOMINIOS
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-title">Usuario hace búsqueda</div>
+                        <div class="step-description">
+                            En <span class="code">HomePage</span> el usuario ejecuta una búsqueda
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-title">Inicio de búsqueda</div>
+                        <div class="step-description">
+                            <span class="code">useDomains.searchDomains()</span> → <span class="code">dispatch(fetchDomainsStart)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-title">Llamada al servicio</div>
+                        <div class="step-description">
+                            <span class="code">fetchDomains(token)</span> hace petición con el token de autenticación
+                        </div>
+                    </div>
+                </div>
+                <div class="decision">
+                    ¿Búsqueda exitosa?
+                </div>
+                <div class="step success">
+                    <div class="step-number">✓</div>
+                    <div class="step-content">
+                        <div class="step-title">Búsqueda exitosa</div>
+                        <div class="step-description">
+                            <span class="code">dispatch(fetchDomainsSuccess)</span> → Guarda dominios en Redux → HomePage muestra resultados
+                        </div>
+                    </div>
+                </div>
+                <div class="step error">
+                    <div class="step-number">✗</div>
+                    <div class="step-content">
+                        <div class="step-title">Error en búsqueda</div>
+                        <div class="step-description">
+                            Si es error de token → Logout automático<br>
+                            Si es otro error → Muestra mensaje de error
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="arrow">⬇️</div>
+        
+        <!-- FASE 5: LOGOUT -->
+        <div class="phase logout">
+            <div class="phase-title">
+                <span class="phase-icon">🚪</span>
+                FASE 5: LOGOUT
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-title">Triggers del logout</div>
+                        <div class="step-description">
+                            • <strong>Voluntario:</strong> Usuario presiona botón logout<br>
+                            • <strong>Automático:</strong> Token inválido durante búsqueda
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-title">Limpieza de datos</div>
+                        <div class="step-description">
+                            <span class="code">removeToken()</span> elimina token del localStorage
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-title">Reset de Redux</div>
+                        <div class="step-description">
+                            <span class="code">dispatch(logoutAction)</span> limpia estado de auth en Redux
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <div class="step-title">Redirección</div>
+                        <div class="step-description">
+                            <span class="code">navigate('/')</span> vuelve a la página de login
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="background: white; padding: 20px; border-radius: 15px; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+            <h3 style="color: #333; margin-bottom: 15px;">📁 Archivos clave en el flujo:</h3>
+            <ul style="color: #666; line-height: 1.8; list-style-type: none; padding: 0;">
+                <li>📄 <span class="code">main.js</span> - Punto de entrada y configuración de rutas</li>
+                <li>🏪 <span class="code">store/store.js</span> - Configuración del store de Redux</li>
+                <li>🔒 <span class="code">store/slices/authSlice.js</span> - Estado global de autenticación</li>
+                <li>🌐 <span class="code">store/slices/domainSlice.js</span> - Estado global de dominios</li>
+                <li>🎣 <span class="code">hooks/useAuth.js</span> - Lógica de autenticación</li>
+                <li>🎣 <span class="code">hooks/useDomains.js</span> - Lógica de búsqueda de dominios</li>
+                <li>🛡️ <span class="code">components/ProtectedRoute.jsx</span> - Protección de rutas privadas</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
