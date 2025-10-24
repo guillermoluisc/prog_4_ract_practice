@@ -1,13 +1,20 @@
+// components/DomainList.jsx
 import DomainCard from "./DomainCard";
 
-export default function DomainList({ domains }) {
+export default function DomainList({ domains, onEdit }) {
   if (!domains || domains.length === 0) {
     return <p>No se encontraron dominios</p>;
   }
 
   return (
     <div style={{ display: "grid", gap: "15px" }}>
-      {domains.map(domain => <DomainCard key={domain.id} domain={domain} />)}
+      {domains.map(domain => (
+        <DomainCard 
+          key={domain.id} 
+          domain={domain} 
+          onEdit={onEdit}
+        />
+      ))}
     </div>
   );
 }

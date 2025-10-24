@@ -2,16 +2,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-// NUEVO: Importar Redux
 import { Provider } from 'react-redux';
 import store from './store/store';
 
-// Importar páginas
+// Páginas
+import PublicPage from "./pages/PublicPage"; // ← NUEVO
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 
-// Componentes
+// Componentes de rutas
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Estilos
@@ -19,12 +18,16 @@ import "./styles/index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    {/* NUEVO: Envolver con Provider de Redux */}
-    {/* El Provider de Redux es el puente que conecta la aplicación React con el store global de Redux. */}
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          {/* Ruta pública: Landing/Home público */}
+          <Route path="/" element={<PublicPage />} />
+
+          {/* Ruta pública: Login */}
+          <Route path="/login" element={<LoginPage />} />
+
+          {/* Ruta privada: Home (Dashboard) */}
           <Route 
             path="/home" 
             element={

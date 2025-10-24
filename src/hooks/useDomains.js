@@ -7,12 +7,15 @@ import {
   fetchDomainsStart, 
   fetchDomainsSuccess, 
   fetchDomainsFailure, 
-  clearDomains 
+  clearDomains,
+  updateDomainStart,    // ← Importar nuevas acciones
+  updateDomainSuccess,
+  updateDomainFailure
 } from '../store/slices/domainSlice';
 import { logout as logoutAction } from '../store/slices/authSlice';
 
 // Services
-import { fetchDomains } from "../services/domainService";
+import { fetchDomains, updateDomain } from "../services/domainService"; // ← Importar updateDomain
 
 // Utils
 import { removeToken } from "../utils/storage";
@@ -21,7 +24,7 @@ export function useDomains() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  // ✨ CAMBIO: Leer desde Redux
+  // Leer desde Redux
   const { domains, isLoading, error } = useSelector((state) => state.domains);
   const { token } = useSelector((state) => state.auth);
 
@@ -31,24 +34,41 @@ export function useDomains() {
       return;
     }
 
-    // ✨ CAMBIO: Dispatch a Redux
     dispatch(fetchDomainsStart());
 
     try {
       const data = await fetchDomains(token);
-      
-      // ✨ CAMBIO: Success a Redux
       dispatch(fetchDomainsSuccess(data));
     } catch (err) {
-      // ✨ CAMBIO: Error a Redux
       dispatch(fetchDomainsFailure(err.message));
       
-      // Si el token es inválido, hacer logout completo
       if (err.message.includes("inválido") || err.message.includes("expirada")) {
         removeToken();
         dispatch(logoutAction());
         navigate("/");
       }
+    }
+  };
+
+  // 🆕 NUEVA FUNCIÓN - Actualizar un dominio
+  const editDomain = async (id, name, code) => {
+    if (!token) {
+      navigate("/");
+      return;
+    }
+
+    dispatch(updateDomainStart());
+
+    try {
+      await updateDomain(id, name, code, token);
+      
+      // ✨ Redux: Actualizar el estado
+      dispatch(updateDomainSuccess({ id, name, code }));
+      
+      return true; // Indica éxito
+    } catch (err) {
+      dispatch(updateDomainFailure(err.message));
+      throw err; // Para que el componente pueda manejar el error
     }
   };
 
@@ -61,6 +81,7 @@ export function useDomains() {
     isLoading,
     error,
     searchDomains,
+    editDomain,          // ← Exportar nueva función
     clearDomains: clearDomainsData
   };
 }

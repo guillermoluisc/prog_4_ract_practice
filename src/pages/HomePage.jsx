@@ -1,21 +1,52 @@
 // pages/HomePage.jsx
+import { useState } from "react"; // ← Agregar useState
 
-//hooks
+// Hooks
 import { useDomains } from "../hooks/useDomains";
 import { useAuth } from "../hooks/useAuth";
-//components
+
+// Components
 import DomainList from "../components/DomainList";
 import Spinner from "../components/Snipper";
+import EditDomainModal from "../components/EditDomainModal"; // ← Importar modal
 
-//utils
+// Utils
 import { capitalize } from "../utils/formatters";
 
 export default function HomePage() {
-  const { domains, isLoading, error, searchDomains } = useDomains();
+  const { domains, isLoading, error, searchDomains, editDomain } = useDomains();
   const { logout } = useAuth();
+  
+  // Estados para el modal
+  const [editingDomain, setEditingDomain] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleLogout = () => {
     logout();
+  };
+
+  // Abrir modal de edición
+  const handleEdit = (domain) => {
+    setEditingDomain(domain);
+    setSuccessMessage("");
+  };
+
+  // Guardar cambios
+  const handleSave = async (id, name, code) => {
+    try {
+      await editDomain(id, name, code);
+      setEditingDomain(null);
+      setSuccessMessage("✅ Dominio actualizado correctamente");
+      
+      setTimeout(() => setSuccessMessage(""), 3000);
+    } catch (error) {
+      console.error("Error al actualizar:", error);
+    }
+  };
+
+  // Cancelar edición
+  const handleCancel = () => {
+    setEditingDomain(null);
   };
 
   return (
@@ -44,6 +75,12 @@ export default function HomePage() {
       <div style={styles.mainContent}>
         <h1 style={styles.welcomeTitle}>{capitalize("bienvenido")} 🎉</h1>
         
+        {successMessage && (
+          <div style={styles.success}>
+            {successMessage}
+          </div>
+        )}
+        
         {error && (
           <div style={styles.error}>
             {error}
@@ -53,9 +90,22 @@ export default function HomePage() {
         {isLoading ? (
           <Spinner styles={styles} />
         ) : (
-          <DomainList domains={domains} />
+          <DomainList 
+            domains={domains} 
+            onEdit={handleEdit}
+          />
         )}
       </div>
+      
+      {/* Modal de edición */}
+      {editingDomain && (
+        <EditDomainModal
+          domain={editingDomain}
+          onSave={handleSave}
+          onCancel={handleCancel}
+          isLoading={isLoading}
+        />
+      )}
     </div>
   );
 }
